@@ -18,9 +18,14 @@ class ShareActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         when (intent?.action) {
+            Intent.ACTION_PROCESS_TEXT -> {
+                val sharedText = intent.getStringExtra(Intent.EXTRA_PROCESS_TEXT)
+                handleTextShare(sharedText)
+            }
             Intent.ACTION_SEND -> {
                 if (intent.type == "text/plain") {
-                    handleTextShare(intent)
+                    val sharedText = intent.getStringExtra(Intent.EXTRA_TEXT)
+                    handleTextShare(sharedText)
                 } else {
                     // Try to handle file share
                     val stream = intent.getParcelableExtra<android.net.Uri>(Intent.EXTRA_STREAM)
@@ -32,10 +37,9 @@ class ShareActivity : ComponentActivity() {
         }
     }
 
-    private fun handleTextShare(intent: Intent) {
+    private fun handleTextShare(sharedText: String?) {
         lifecycleScope.launch {
             try {
-                val sharedText = intent.getStringExtra(Intent.EXTRA_TEXT)
                 if (sharedText != null) {
                     val dataStoreManager = DataStoreManager(this@ShareActivity)
 

@@ -67,9 +67,16 @@
             android:name=".presentation.ui.activities.ShareActivity"
             android:exported="true"
             android:theme="@android:style/Theme.Translucent.NoTitleBar"
-            android:noHistory="true">
+            android:noHistory="true"
+            android:label="Copy (AirSync)">
             <intent-filter>
                 <action android:name="android.intent.action.SEND" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <data android:mimeType="text/plain" />
+            </intent-filter>
+            <!-- Text Selection action -->
+            <intent-filter>
+                <action android:name="android.intent.action.PROCESS_TEXT" />
                 <category android:name="android.intent.category.DEFAULT" />
                 <data android:mimeType="text/plain" />
             </intent-filter>
