@@ -79,6 +79,33 @@ object NotificationDismissalUtil {
     }
 
     /**
+     * Dismiss all notifications
+     */
+    fun dismissAllNotifications(): Boolean {
+        return try {
+            val service = getNotificationListenerService()
+            if (service != null) {
+                // Mark all currently active notifications as suppressed to avoid echo
+                activeNotifications.keys.forEach { markSuppressed(it) }
+                
+                service.cancelAllNotifications()
+                
+                // Clear local caches
+                activeNotifications.clear()
+                keyToId.clear()
+                Log.d(TAG, "Successfully dismissed all notifications")
+                true
+            } else {
+                Log.w(TAG, "Notification listener service not available")
+                false
+            }
+        } catch (e: Exception) {
+            Log.e(TAG, "Error dismissing all notifications: ${e.message}")
+            false
+        }
+    }
+
+    /**
      * Perform an action on the notification by title. If replyText is provided and the action supports inline reply, send it.
      */
     fun performNotificationAction(notificationId: String, actionName: String, replyText: String? = null): Boolean {

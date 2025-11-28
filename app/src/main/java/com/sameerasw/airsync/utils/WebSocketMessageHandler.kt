@@ -38,6 +38,7 @@ object WebSocketMessageHandler {
                 "volumeControl" -> handleVolumeControl(context, data)
                 "mediaControl" -> handleMediaControl(context, data)
                 "dismissNotification" -> handleNotificationDismissal(data)
+                "dismissAllNotifications" -> handleDismissAllNotifications(context)
                 "notificationAction" -> handleNotificationAction(data)
                 "disconnectRequest" -> handleDisconnectRequest(context)
                 "toggleAppNotif" -> handleToggleAppNotification(context, data)
@@ -275,6 +276,16 @@ object WebSocketMessageHandler {
         } catch (e: Exception) {
             Log.e(TAG, "Error handling notification dismissal: ${e.message}")
             sendNotificationDismissalResponse("unknown", false, "Error: ${e.message}")
+        }
+    }
+
+    private fun handleDismissAllNotifications(context: Context) {
+        try {
+            val success = NotificationDismissalUtil.dismissAllNotifications()
+            val message = if (success) "All notifications dismissed" else "Failed to dismiss all notifications"
+            Log.d(TAG, "Dismiss all notifications result: $success")
+        } catch (e: Exception) {
+            Log.e(TAG, "Error handling dismiss all notifications: ${e.message}")
         }
     }
 
